@@ -37,5 +37,18 @@
     "vue-cli-plugin-style-resources-loader": "~0.1.5",
     "vue-template-compiler": "^2.6.11",
     "webpack-bundle-analyzer": "^4.4.2"
-  }
+  },
+  "description": "test template vue pc",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ytnosmoking/template-vue-pc.git"
+  },
+  "keywords": ["template", "vue"],
+  "author": "yt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ytnosmoking/template-vue-pc/issues"
+  },
+  "homepage": "https://github.com/ytnosmoking/template-vue-pc#readme",
+  "main": "null"
 }

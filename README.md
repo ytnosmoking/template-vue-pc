@@ -1,24 +1,33 @@
-# vue-pc
+# VUE - PC - TEMPLATE
 
-## Project setup
-```
-yarn install
-```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+### 基本结构
+> src
+> > assets
+> >
+> > components
+> >
+> > filters
+> >
+> > router
+> >
+> > store
+> >
+> > utils
+> >
+> > views
 
-### Compiles and minifies for production
-```
-yarn build
-```
+### vue.config.js  
 
-### Lints and fixes files
-```
-yarn lint
-```
+1. webpack-bundle-analyzer
+2. compression-webpack-plugin
+3. hard-source-webpack-plugin
+4. style-resources-loader
+5. vue-cli-plugin-style-resources-loader
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### About
+
+``` text
+ 路由 状态 管理已经基本构造完成 
+```
