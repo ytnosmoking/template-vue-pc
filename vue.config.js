@@ -2,6 +2,7 @@
 // eslint-disable-next-line no-unused-vars
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const CompressionPlugin = require('compression-webpack-plugin') // Gzip  只用在 开发阶段
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin')
 const path = require('path')
 const isDev = process.env.NODE_ENV === 'development'
 const resolve = dir => {
@@ -20,6 +21,7 @@ const gzip = new CompressionPlugin({ // 文件开启Gzip，也可以通过服务
 
 if (isDev) {
   // plugins.push(new BundleAnalyzerPlugin())
+  plugins.push(new HardSourceWebpackPlugin())
 }
 if (!isDev) {
   plugins.push(gzip)
