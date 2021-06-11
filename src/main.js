@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import * as filters from './filters'
 import 'common/SvgIcon'
+//  生产打包的时候 element-ui 如果用cdn 把这里动态加载关闭 同时要把动态的babelrc 也要注释 防止打包进去
+// import './use';
 
 import '@/assets/styles/normalize.less'
 

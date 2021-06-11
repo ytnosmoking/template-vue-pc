@@ -9,6 +9,7 @@ const resolve = dir => {
   return path.join(__dirname, dir)
 }
 
+const projectName = '项目名称'
 const plugins = []
 
 const gzip = new CompressionPlugin({ // 文件开启Gzip，也可以通过服务端(如：nginx)(https://github.com/webpack-contrib/compression-webpack-plugin)
@@ -20,17 +21,47 @@ const gzip = new CompressionPlugin({ // 文件开启Gzip，也可以通过服务
 })
 
 if (isDev) {
-  // plugins.push(new BundleAnalyzerPlugin())
   plugins.push(new HardSourceWebpackPlugin())
-}
-if (!isDev) {
+} else {
+  plugins.push(new BundleAnalyzerPlugin())
   plugins.push(gzip)
 }
+
+const cdn = {
+  css: [],
+  // 像第三方依赖vue 的 要将vue 优先放置
+  js: [
+    // 自己去找cdn  https://www.bootcdn.cn/
+  ], // 
+}
+
+const externals = {
+  // 一般情况
+  // vue: 'Vue',
+  // vuex: 'Vuex',
+  // 'vue-router': 'VueRouter',
+  // axios: 'axios',
+  // 'element-ui': 'ELEMENT',
+  // moment: 'moment',
+  // nprogress: 'NProgress'
+}
+
+
 
 module.exports = {
   // baseUrl: BASE_URL,
   // 如果不需要使用eslint，把lintOnSave设为false即可
   // lintOnSave: true,
+
+  // !!构建打包的输出目录
+  // outputDir: 'dist/release',
+  // !! 资源文件的输出地址
+  // assetsDir: 'static',
+  // !! 公共资源文件的基础路由地址
+  // publicPath: `/mis/${process.env.MIS_MDU}/`,
+  // !! 生产环境下是否开启sourceMap 打包时不生成.map文件
+
+  productionSourceMap: isDev,
 
   chainWebpack: config => {
     config.resolve.alias
@@ -40,7 +71,9 @@ module.exports = {
       .set('utils', resolve('src/utils'))
       .set('mixins', resolve('src/mixins'))
       .set('store', resolve('src/store'))
+
     config.module.rules.delete('svg')
+    // 自己去iconfont 可以找相关的svg 图标 https://www.iconfont.cn/
     config.module
       .rule('svg-sprite-loader')
       .test(/\.svg$/)
@@ -53,28 +86,34 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
 
-    if (!isDev) {
-      config.optimization.minimizer[0].options.terserOptions.compress.warnings = false
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true
-      config.optimization.minimizer[0].options.terserOptions.compress.drop_debugger = true
-      config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log']
-    }
-    // if (process.env.NODE_ENV !== 'development') {
-    //   config.plugin('html').tap(opts => {
-    //     opts[0].minify.removeComments = false
-    //     return opts
-    //   })
-    // }
+    // htmlWebpackPlugin 插件
+    config.plugin('html')
+      .tap((args) => {
+        args[0].title = projectName
+        if (!isDev) {
+          args[0].cdn = cdn;
+        }
+        return args;
+      });
 
-    // console.log(config, 'chainWebpack')
     // 移除 prefetch 插件
     config.plugins.delete('prefetch')
     // 移除 preload 插件
     config.plugins.delete('preload')
   },
 
-  // 打包时不生成.map文件
-  productionSourceMap: isDev,
+  configureWebpack: config => {
+    config.plugins.push(...plugins);
+    if (!isDev) {
+      config.optimization.minimizer[0].options.terserOptions.compress.warnings = false;
+      config.optimization.minimizer[0].options.terserOptions.compress.drop_console = true;
+      config.optimization.minimizer[0].options.terserOptions.compress.drop_debugger = true;
+      config.optimization.minimizer[0].options.terserOptions.compress.pure_funcs = ['console.log'];
+
+      config.externals = externals;
+    }
+  },
+
 
   devServer: {
     open: false,
@@ -91,18 +130,6 @@ module.exports = {
         }
       }
     }
-  },
-
-  configureWebpack: {
-    // externals: {
-    //   vue: 'Vue',
-    //   'vue-router': 'VueRouter',
-    //   vuex: 'Vuex',
-    //   axios: 'axios',
-    //   moment: 'moment',
-    //   nprogress: 'NProgress'
-    // },
-    plugins
   },
 
   pluginOptions: {
